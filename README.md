@@ -21,5 +21,5 @@ nodes will provide a better accuracy). Output layer contains 10 nodes, one for e
 Note: In the feedforward method in run1.py and handwrittingtrial1.py , z2=z2/100.0 to normailize the data. If not done,
 the value of z2 will be large and hence the value of a2 will be all ones (due to sigmoid function).
 
-With running only one epoch, the accuracy is 92%. The accuracy will most defintly increase with number of epochs and also number of
+With running only one epoch, the accuracy is 93.9%. The accuracy will most defintly increase with number of epochs and also number of
 nodes in hidden layer.
