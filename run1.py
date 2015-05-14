@@ -4,14 +4,15 @@ import mnist
 import math
 from PIL import Image
 from numpy import array
+import matplotlib.pyplot as plt
 
 
 x1=784
 y1=30
 z1=10
 
-theta1=pickle.load(open("theta1.npy","rb"))
-theta2=pickle.load(open("theta2.npy","rb"))
+theta1=pickle.load(open("theta1_new.npy","rb"))
+theta2=pickle.load(open("theta2_new.npy","rb"))
 
 images,labels = mnist.load_mnist('training')
 a2=np.empty([y1+1,1],dtype='float64') #31x1
@@ -34,15 +35,22 @@ def feedforward2(input1):
 	return list1;
 
 
-im = Image.open("2_small.jpg")
-image1 = array(im,dtype='f')
-image1 = image1.reshape(784,1)
-#image1=images[0].reshape(784,1)
-#image1=np.empty([784,1])
+#im = Image.open("two.jpg")
+#image1 = array(im,dtype='f')
+#image1 = image1.reshape(784,1)
+image1=images[142].reshape(784,1)
 input1=np.zeros([785,1],dtype='float64')
 for i in range(1,785):
 	input1[i]=image1[i-1]/(255.0)
 input1[0]=1.0
 
 c=feedforward2(input1);
-print c[1]
+index=np.where(c[1]==max(c[1]));
+#print c[1];
+print "\n Number is ",index[0][0];
+plt.bar(np.arange(10),c[1],1);
+plt.xlabel('Digits');
+plt.ylabel('Probability of recognition');
+plt.title('Results');
+plt.xticks(np.array([0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5]), ('0','1', '2', '3', '4', '5','6','7','8','9'))
+plt.show();

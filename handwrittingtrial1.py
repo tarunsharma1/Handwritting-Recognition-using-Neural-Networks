@@ -3,6 +3,7 @@ import mnist
 import math
 from random import randint
 import pickle
+import random
 
 images,labels = mnist.load_mnist('training')
 #print labels[550][0]
@@ -46,86 +47,92 @@ def feedforward(trial_input):
 def backprop():
 	global theta1
 	global theta2
-	for j in range(0,5000): #number of iterations for gradient descent
+	global images
+	global labels
+	for l in range(0,30):
+		for j in range(0,5000): #number of iterations for gradient descent
 	##loop from 1 to 1000
-		D1 = np.zeros((y1,(x1+1)))
-		D2 = np.zeros((z1,(y1+1)))
-		x=np.empty([785,1],dtype='float64')
-		lower=10*j
-	        upper=lower+10
-		for i in range(lower,upper):                                      #for every input
-			temp1=images[i].reshape(784,1)
-			temp1=temp1/(255.0)
-			for k in range(1,(x1+1)):
-				x[k]=temp1[k-1]
-			x[0]=1.0
+			D1 = np.zeros((y1,(x1+1)))
+			D2 = np.zeros((z1,(y1+1)))
+			x=np.empty([785,1],dtype='float64')
+			lower=10*j
+	        	upper=lower+10
+			for i in range(lower,upper):                                      #for every input
+				temp1=images[i].reshape(784,1)
+				temp1=temp1/(255.0)
+				for k in range(1,(x1+1)):
+					x[k]=temp1[k-1]
+				x[0]=1.0
 		
 			## format output y
-			temp2 = labels[i][0]
-			if(temp2 == 0):
-				y=np.array([[1.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
-			elif(temp2 == 1):
-				y=np.array([[0.0],[1.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
-			elif(temp2 == 2):
-				y=np.array([[0.0],[0.0],[1.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
-			elif(temp2 == 3):
-				y=np.array([[0.0],[0.0],[0.0],[1.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
-			elif(temp2 == 4):
-				y=np.array([[0.0],[0.0],[0.0],[0.0],[1.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
-			elif(temp2 == 5):
-				y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[1.0],[0.0],[0.0],[0.0],[0.0]])
-			elif(temp2 == 6):
-				y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[1.0],[0.0],[0.0],[0.0]])
-			elif(temp2 == 7):
-				y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[1.0],[0.0],[0.0]])
-			elif(temp2 == 8):
-				y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[1.0],[0.0]])
-			else:
-				y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[1.0]])
+				temp2 = labels[i][0]
+				if(temp2 == 0):
+					y=np.array([[1.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
+				elif(temp2 == 1):
+					y=np.array([[0.0],[1.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
+				elif(temp2 == 2):
+					y=np.array([[0.0],[0.0],[1.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
+				elif(temp2 == 3):
+					y=np.array([[0.0],[0.0],[0.0],[1.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
+				elif(temp2 == 4):
+					y=np.array([[0.0],[0.0],[0.0],[0.0],[1.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
+				elif(temp2 == 5):
+					y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[1.0],[0.0],[0.0],[0.0],[0.0]])
+				elif(temp2 == 6):
+					y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[1.0],[0.0],[0.0],[0.0]])
+				elif(temp2 == 7):
+					y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[1.0],[0.0],[0.0]])
+				elif(temp2 == 8):
+					y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[1.0],[0.0]])
+				else:
+					y=np.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[0.0],[1.0]])
 		
 		
 		#preprocessing done correctly for each input
-			list1 = feedforward(x)
-			a2 = list1[0];
-			output = list1[1];
+				list1 = feedforward(x)
+				a2 = list1[0];
+				output = list1[1];
 		#now calculate deltas
-			delta3 = output - y
-			ones = np.ones([(y1+1),1])
-			temp3 = ones - a2
- 			temp4 = np.empty(((y1+1),1),dtype='float64')
-			for k in range(0,(y1+1)):
-				temp4[k] = a2[k] * temp3[k]
-			temp5 = np.dot(np.transpose(theta2),delta3)
-			temp6 = np.empty(((y1+1),1),dtype='float64')
-			for k in range(0,(y1+1)):
-				temp6[k] = temp5[k] * temp4[k]
-			delta2 = temp6
+				delta3 = output - y
+				ones = np.ones([(y1+1),1])
+				temp3 = ones - a2
+ 				temp4 = np.empty(((y1+1),1),dtype='float64')
+				for k in range(0,(y1+1)):
+					temp4[k] = a2[k] * temp3[k]
+				temp5 = np.dot(np.transpose(theta2),delta3)
+				temp6 = np.empty(((y1+1),1),dtype='float64')
+				for k in range(0,(y1+1)):
+					temp6[k] = temp5[k] * temp4[k]
+				delta2 = temp6
 		##--------not sure of this-----
-			delta2_new = np.empty((y1,1),dtype='float64')
+				delta2_new = np.empty((y1,1),dtype='float64')
 		#because of dimension problem in D later, I am removing the first row of delta2 which is always zero.
 		#this sort of makes sense because delta2[0] represents error of bias unit.
-			for k in range(0,y1):
-				delta2_new[k]=delta2[k+1]
+				for k in range(0,y1):
+					delta2_new[k]=delta2[k+1]
 		
 		##--------------------------------
 
 		# now for each input, we have calculated errors delta3 and delta2..we need to get the sums of errors for all inputs. D1 and 
                 #  D2 for layers respectively.
-			D1=D1 + np.dot(delta2_new,np.transpose(x))
-			D2=D2 + np.dot(delta3,np.transpose(a2))
+				D1=D1 + np.dot(delta2_new,np.transpose(x))
+				D2=D2 + np.dot(delta3,np.transpose(a2))
 		
 	#outside loop..now we have sum of errors as D1 and D2 and we use this in gradient descent to update theta values
 				
-		temp_matrix1 = theta1 - (((alpha)/(10.0))*D1)      
-		temp_matrix2 = theta2 - (((alpha)/(10.0))*D2)
-		theta1 = temp_matrix1
-		theta2 = temp_matrix2
-		
+			temp_matrix1 = theta1 - (((alpha)/(10.0))*D1)      
+			temp_matrix2 = theta2 - (((alpha)/(10.0))*D2)
+			theta1 = temp_matrix1
+			theta2 = temp_matrix2
+	
+	training_data=zip(images,labels)	
+	random.shuffle(training_data)
+	images,labels = zip(*training_data)	
    
 backprop();
 #print theta1
-pickle.dump(theta1,open("theta1.npy","wb"))
-pickle.dump(theta2,open("theta2.npy","wb"))
+pickle.dump(theta1,open("theta1_new.npy","wb"))
+pickle.dump(theta2,open("theta2_new.npy","wb"))
 image1=images[4].reshape(784,1)
 image2=images[5].reshape(784,1)
 input1=np.empty([785,1],dtype='float64')
